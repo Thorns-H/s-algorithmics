@@ -3,26 +3,26 @@
 
 int main() {
 
-    std::ifstream archivo("compressed.rlc", std::ios::binary);
-    std::ofstream archivoDescomprimido("output.bin", std::ios::binary);
+    std::ifstream inputFile("compressed.rlc", std::ios::binary);
+    std::ofstream outputFile("output.bin", std::ios::binary);
 
-    char cabecera[5];
-    archivo.read(cabecera, 5);
-    if (!(cabecera[0] != 'R' || cabecera[1] != 'L' || cabecera[2] != 'C' || cabecera[3] != 8 || cabecera[4] != 16)) {
+    char header[5];
+    inputFile.read(header, 5);
+    if (!(header[0] != 'R' || header[1] != 'L' || header[2] != 'C' || header[3] != 8 || header[4] != 16)) {
 
-        char dato;
-        short contador;
+        char value;
+        short counter;
         unsigned char bytes[2];
 
-        while (archivo.get(dato) && archivo.read(reinterpret_cast<char*>(&bytes), sizeof(bytes))){
-            short contador = (static_cast<short>(bytes[1])) | static_cast<short>(bytes[0] << 8);
-            for (int i = 0; i < contador; i++) {
-                archivoDescomprimido.put(dato);
+        while (inputFile.get(value) && inputFile.read(reinterpret_cast<char*>(&bytes), sizeof(bytes))){
+            short counter = (static_cast<short>(bytes[1])) | static_cast<short>(bytes[0] << 8);
+            for (int i = 0; i < counter; i++) {
+                outputFile.put(value);
             }
         }
 
-        archivo.close();
-        archivoDescomprimido.close();
+        inputFile.close();
+        outputFile.close();
     }
 
     return 0;
